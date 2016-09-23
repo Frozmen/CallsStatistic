@@ -26,6 +26,12 @@ public class CallsStatisticProvider {
 
     public CallsStatisticProvider(Context context) {
         this.context = context;
+        updateStatistic();
+    }
+
+    private static List<Call> getCallDetails(Context context) {
+        StringBuffer stringBuffer = new StringBuffer();
+        List<Call> callList = new ArrayList<>();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -34,42 +40,37 @@ public class CallsStatisticProvider {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
+            return null;
         }
-
-        updateStatistic();
-    }
-
-    private static List<Call> getCallDetails(Context context) {
-        StringBuffer stringBuffer = new StringBuffer();
-        List<Call> callList = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
                 null, null, null, CallLog.Calls.DATE + " DESC");
         int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
         int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
         int date = cursor.getColumnIndex(CallLog.Calls.DATE);
         int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
+        int contactNameIndex = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
         while (cursor.moveToNext()) {
+            String contactName = cursor.getString(contactNameIndex);
             String phNumber = cursor.getString(number);
             String callType = cursor.getString(type);
             String callDate = cursor.getString(date);
             Date callDayTime = new Date(Long.valueOf(callDate));
             String callDuration = cursor.getString(duration);
-            String dir = null;
+            Call.CallType dir = null;
             int dircode = Integer.parseInt(callType);
             switch (dircode) {
                 case CallLog.Calls.OUTGOING_TYPE:
-                    dir = "OUTGOING";
+                    dir = Call.CallType.OUTGOING;
                     break;
                 case CallLog.Calls.INCOMING_TYPE:
-                    dir = "INCOMING";
+                    dir = Call.CallType.INCOMING;;
                     break;
 
                 case CallLog.Calls.MISSED_TYPE:
-                    dir = "MISSED";
+                    dir = Call.CallType.MISSED;
                     break;
             }
-            callList.add(new Call(phNumber, callType, callDayTime, callDuration));
+            callList.add(new Call(contactName, phNumber, dir, callDayTime, callDuration));
         }
         cursor.close();
         return callList;

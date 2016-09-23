@@ -7,12 +7,17 @@ import java.util.Date;
  */
 
 public class Call {
+    public enum CallType {
+        OUTGOING, INCOMING, MISSED
+    }
+    private String contactName;
     private String phNumber;
-    private String callType;
+    private CallType callType;
     private Date callDayTime;
     private String callDuration;
 
-    public Call(String phNumber, String callType, Date callDayTime, String callDuration) {
+    public Call(String contactName, String phNumber, CallType callType, Date callDayTime, String callDuration) {
+        this.contactName = contactName;
         this.phNumber = phNumber;
         this.callType = callType;
         this.callDayTime = callDayTime;
@@ -29,7 +34,8 @@ public class Call {
         if(obj instanceof Call){
             Call call = (Call) obj;
             if(phNumber.equals(call.phNumber) && callType.equals(call.callType)
-                    && callDayTime.equals(call.callDayTime) && callDuration.equals(call.callDuration)){
+                    && callDayTime.equals(call.callDayTime) && callDuration.equals(call.callDuration)
+                    && contactName.equals(call.contactName)){
                 return true;
             }
         }
