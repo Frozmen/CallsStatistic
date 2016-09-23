@@ -41,4 +41,28 @@ public class Call {
         }
         return false;
     }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public String getPhNumber() {
+        return phNumber;
+    }
+
+    public CallType getCallType() {
+        return callType;
+    }
+
+    public Date getCallDayTime() {
+        return callDayTime;
+    }
+
+    public long getCallDayTimeInMillisecond() {
+        return callDayTime.getTime();
+    }
+
+    public String getCallDuration() {
+        return callDuration;
+    }
 }

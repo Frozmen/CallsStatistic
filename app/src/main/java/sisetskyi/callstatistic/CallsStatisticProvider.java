@@ -29,8 +29,7 @@ public class CallsStatisticProvider {
         updateStatistic();
     }
 
-    private static List<Call> getCallDetails(Context context) {
-        StringBuffer stringBuffer = new StringBuffer();
+    public static List<Call> getCallDetails(Context context) {
         List<Call> callList = new ArrayList<>();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
