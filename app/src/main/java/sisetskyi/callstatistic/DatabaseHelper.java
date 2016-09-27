@@ -62,6 +62,10 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     public void upgradeDataBase(){
         List<Call> calls = CallsStatisticProvider.getCallDetails(mContext);
+        addListToDataBase(calls);
+    }
+
+    private void addListToDataBase(List<Call> calls){
         for(Call call : calls){
             ContentValues values = new ContentValues();
             values.put(DatabaseHelper.CONTACT_NAME_COLUMN, call.getContactName());

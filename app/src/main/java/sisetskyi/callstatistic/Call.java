@@ -1,6 +1,8 @@
 package sisetskyi.callstatistic;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by User on 22.09.2016.
@@ -60,6 +62,12 @@ public class Call {
 
     public long getCallDayTimeInMillisecond() {
         return callDayTime.getTime();
+    }
+
+    public String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return dateFormat.format(callDayTime);
     }
 
     public String getCallDuration() {
