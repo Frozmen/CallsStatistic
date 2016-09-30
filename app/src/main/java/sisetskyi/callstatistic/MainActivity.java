@@ -50,20 +50,17 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        final CallsStatisticProvider callsStatisticProvider = new CallsStatisticProvider(this);
+        //final CallsStatisticProvider callsStatisticProvider = new CallsStatisticProvider(this);
+        final DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callsStatisticProvider.updateStatistic();
+                databaseHelper.updateCallsDataBase();
             }
         });
-
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
