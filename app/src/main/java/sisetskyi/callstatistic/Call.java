@@ -17,6 +17,7 @@ public class Call {
     private CallType callType;
     private Date callDayTime;
     private String callDuration;
+    private String operatorConditionalCode;
 
     public Call(String contactName, String phNumber, CallType callType, Date callDayTime, String callDuration) {
         this.contactName = contactName;
@@ -24,11 +25,21 @@ public class Call {
         this.callType = callType;
         this.callDayTime = callDayTime;
         this.callDuration = callDuration;
+        setOperatorConditionalKey();
+    }
+
+    public Call(String contactName, String phNumber, CallType callType, Date callDayTime, String callDuration, String operatorConditionalCode) {
+        this.contactName = contactName;
+        this.phNumber = phNumber;
+        this.callType = callType;
+        this.callDayTime = callDayTime;
+        this.callDuration = callDuration;
+        this.operatorConditionalCode = operatorConditionalCode;
     }
 
     @Override
     public String toString() {
-        return "Call: " + phNumber + ", " + callType + ", " + callDayTime + ", " + callDuration;
+        return "Call: " + phNumber + ", " + operatorConditionalCode + ", " + callType + ", " + callDayTime + ", " + callDuration;
     }
 
     @Override
@@ -42,6 +53,15 @@ public class Call {
             }
         }
         return false;
+    }
+
+    private void setOperatorConditionalKey(){
+        try {
+            operatorConditionalCode = MobileOperatorsHelper.getOperatorConditionalCode(phNumber);
+        } catch (MobileOperatorsHelper.IllegalFormatNumberException e) {
+            operatorConditionalCode = MobileOperatorsHelper.UNKNOWN_CONDITIONAL_KEY;
+            e.printStackTrace();
+        }
     }
 
     public String getContactName() {
@@ -72,5 +92,9 @@ public class Call {
 
     public String getCallDuration() {
         return callDuration;
+    }
+
+    public String getOperatorConditionalCode() {
+        return operatorConditionalCode;
     }
 }

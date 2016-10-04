@@ -1,11 +1,9 @@
 package sisetskyi.callstatistic;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -18,27 +16,15 @@ import java.util.List;
  * Created by User on 22.09.2016.
  */
 
-public class CallsStatisticProvider {
+public class CallsProvider {
 
-    private static final String TAG = CallsStatisticProvider.class.getName();
-    private Context context;
-    private List<Call> calls;
+    private static final String TAG = CallsProvider.class.getName();
 
-    public CallsStatisticProvider(Context context) {
-        this.context = context;
+    private CallsProvider() {
     }
 
-    public static List<Call> getCallDetails(Context context) {
-       /* if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return null;
-        }*/
+    public static List<Call> getAllCalls(Context context) {
+        checkPermission(context);
 
         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
                 null, null, null, CallLog.Calls.DATE + " DESC");
@@ -47,17 +33,8 @@ public class CallsStatisticProvider {
     }
 
     public static List<Call> getCallsListAfterConcreteCall(Context context, Call call){
+        checkPermission(context);
 
-       /* if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return null;
-        }*/
         String selection = CallLog.Calls.DATE + " > ?";
         String[] selectionArgs = new String[] {String.valueOf(call.getCallDayTimeInMillisecond())};
 
@@ -67,7 +44,7 @@ public class CallsStatisticProvider {
         return queryInPhoneList(cursor);
     }
 
-    public static List<Call> queryInPhoneList(Cursor cursor){
+    private static List<Call> queryInPhoneList(Cursor cursor){
         List<Call> callList = new ArrayList<>();
         int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
         int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
@@ -99,6 +76,20 @@ public class CallsStatisticProvider {
         }
         cursor.close();
         return callList;
+    }
+
+    private static void checkPermission(Context context){
+          if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+              Log.d(TAG, "checkPermission: not have permission");
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
     }
 
 }

@@ -2,4 +2,14 @@
     <string name="app_name">CallStatistic</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- Names of operators -->
+    <string name="lifeCell_name">LifeCell(Life)</string>
+    <string name="kievstar_name">Kyivstar</string>
+    <string name="mts_name">Vodafone(MTS)</string>
+    <string name="utel_name">Utel</string>
+    <string name="peoplenet_name">Peoplenet</string>
+    <string name="intertelecom_name">Intertelecom</string>
+    <string name="ukrainelocal_name">Ukraine(Local)</string>
+    <string name="unknown">Unknown</string>
 </resources>
